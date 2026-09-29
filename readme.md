@@ -1,0 +1,1 @@
+bhai abhi tk maine user ka schema define kr diya hai and hmm maine post main se check kr liya hai data aa raha hai ya nhi baki backend check kr rha hai data correct hai ya nhi aaj k liye itna hi baki kl kr lenge good bye
