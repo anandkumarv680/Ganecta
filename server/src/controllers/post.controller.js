@@ -85,10 +85,51 @@ const updatePost = async (req, res) => {
   }
 };
 
+
+const toggleLike = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const userId = req.user.id;
+
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({
+        Error: "Post not found",
+      });
+    }
+
+    const isLiked = post.likes.some(
+      (id) => id.toString() === userId
+    );
+
+    if (isLiked) {
+      post.likes.pull(userId);
+    } else {
+      post.likes.push(userId);
+    }
+
+    await post.save();
+
+    return res.status(200).json({
+      Message: isLiked ? "unliked" : "liked",
+      liked: !isLiked,
+      likesCount: post.likes.length,
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
+
 module.exports = {
   createPost,
   deletePost,
   getAllPosts,
   updatePost,
   getPostById,
+  toggleLike,
 };

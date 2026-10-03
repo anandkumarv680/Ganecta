@@ -7,11 +7,13 @@ const {
   getAllPosts,
   updatePost,
   getPostById,
+  toggleLike,
 } = require("../controllers/post.controller");
 
 const router = express.Router();
 
 router.post("/", authMiddleware, createPost);
+router.post("/:postId/like", authMiddleware, toggleLike);
 router.get("/", getAllPosts);
 router.get("/:postId", getPostById);
 router.put("/:postId", authMiddleware, updatePost);
