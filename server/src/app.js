@@ -4,7 +4,8 @@ const app = express();
 const loginRoutes = require("./routes/login.route");
 const postRoutes = require('./routes/post.route');
 const userRoutes = require("./routes/user.route");
-const commentRoutes = require("./routes/comment.route")
+const commentRoutes = require("./routes/comment.route");
+const challengeRoutes = require('./routes/challenge.route');
 
 
 
@@ -15,6 +16,7 @@ app.use("/api/auth/users", loginRoutes);
 app.use('/api/posts', postRoutes )
 app.use("/api/users", userRoutes);
 app.use("/api/posts/comments", commentRoutes)
+app.use('/api/challenges', challengeRoutes)
 
 app.get("/", (req, res) => {
   res.json({ Message: "Welcome to Ganecta " });
