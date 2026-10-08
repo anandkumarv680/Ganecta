@@ -8,9 +8,12 @@ const {
   followUser,
   getFollowers,
   getFollowing,
+  searchUser,
 } = require("../controllers/user.controller");
 
 const authMiddleware = require("../middleware/auth.middleware");
+
+router.get("/search", searchUser);
 
 router.put("/profile", authMiddleware, updateUserProfile);
 

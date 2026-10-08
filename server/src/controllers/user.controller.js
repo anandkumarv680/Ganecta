@@ -3,7 +3,6 @@ const User = require("../models/user.model");
 
 const getUserById = async (req, res) => {
   try {
-
     const { userId } = req.params;
 
     const user = await User.findById(userId).select("-password");
@@ -30,7 +29,6 @@ const updateUserProfile = async (req, res) => {
 
     const { name, bio, skills, profileUrl } = req.body;
 
-
     if (name !== undefined) user.name = name;
     if (bio !== undefined) user.bio = bio;
     if (skills !== undefined) user.skills = skills;
@@ -55,15 +53,12 @@ const updateUserProfile = async (req, res) => {
 
 const getUserPost = async (req, res) => {
   try {
-
     const { userId } = req.params;
-
 
     const posts = await Post.find({ author: userId }).populate(
       "author",
       "name username profilePicture",
     );
-
 
     if (posts.length === 0) {
       return res.status(200).json({
@@ -80,7 +75,6 @@ const getUserPost = async (req, res) => {
 
 const followUser = async (req, res) => {
   try {
-
     const userId = req.user.id;
     const { followId } = req.params;
 
@@ -91,19 +85,15 @@ const followUser = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-
     if (userId === followId) {
       return res.status(400).json({
         error: "You cannot follow yourself",
       });
     }
 
-
-
     const isFollowing = user.following.some((id) => id.toString() === followId);
 
     if (isFollowing) {
-
       user.following = user.following.filter(
         (id) => id.toString() !== followId,
       );
@@ -119,7 +109,6 @@ const followUser = async (req, res) => {
         message: "Unfollowed successfully",
       });
     }
-
 
     user.following.push(followId);
     targetUser.followers.push(userId);
@@ -137,7 +126,6 @@ const followUser = async (req, res) => {
 
 const getFollowers = async (req, res) => {
   try {
-
     const { userId } = req.params;
 
     const user = await User.findById(userId).populate(
@@ -157,7 +145,6 @@ const getFollowers = async (req, res) => {
 
 const getFollowing = async (req, res) => {
   try {
-
     const { userId } = req.params;
 
     const user = await User.findById(userId).populate(
@@ -175,6 +162,32 @@ const getFollowing = async (req, res) => {
   }
 };
 
+const searchUser = async (req, res) => {
+  try {
+    const { q } = req.query;
+
+    if (!q || q.trim() === "") {
+      return res.status(400).json({
+        error: "Input field is empty",
+      });
+    }
+
+    const user = await User.find({
+      $or: [
+        { username: { $regex: q, $options: "i" } },
+        { name: { $regex: q, $options: "i" } },
+      ],
+    }).select("name username profilePicture");
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error searching users",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getUserById,
   updateUserProfile,
@@ -182,4 +195,5 @@ module.exports = {
   followUser,
   getFollowers,
   getFollowing,
+  searchUser
 };

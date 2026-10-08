@@ -17,7 +17,7 @@ router.get("/:challengeId", getChallengeById);
 router.put("/:challengeId", authMiddleware, updateChallenge);
 router.delete("/:challengeId", authMiddleware, deleteChallenge);
 
-router.post("/user", authMiddleware, createChallenge);
-router.post("/user/:challengeId", authMiddleware, joinChallenge);
+router.post("/", authMiddleware, createChallenge);
+router.post("/:challengeId/join", authMiddleware, joinChallenge);
 
 module.exports = router;
