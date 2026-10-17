@@ -6,12 +6,15 @@ const postRoutes = require('./routes/post.route');
 const userRoutes = require("./routes/user.route");
 const commentRoutes = require("./routes/comment.route");
 const challengeRoutes = require('./routes/challenge.route');
+const notificationRoutes = require("./routes/notification.route");
 
 
 
 app.use(express.json());
 app.use(cors());
 
+
+app.use("/api/notifications", notificationRoutes);
 app.use("/api/auth/users", loginRoutes);
 app.use('/api/posts', postRoutes )
 app.use("/api/users", userRoutes);

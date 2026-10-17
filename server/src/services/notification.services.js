@@ -1,3 +1,5 @@
+const Notification = require('../models/notification.model');
+
 const createNotification = async (notificationData) => {
   try {
     const notification = await Notification.create(notificationData);
@@ -6,3 +8,6 @@ const createNotification = async (notificationData) => {
     throw new Error('Error creating notification: ' + error.message);
   }
 };
+
+
+module.exports = {createNotification};

@@ -1,5 +1,6 @@
 const Post = require("../models/post.model");
 const Comment = require("../models/comment.model");
+const { createNotification } = require("../services/notification.services");
 
 const createComment = async (req, res) => {
   try {
@@ -25,6 +26,17 @@ const createComment = async (req, res) => {
     });
 
     await comment.save();
+    if (post.author.toString() !== userId) {
+      const user = await User.findById(userId);
+
+      await createNotification({
+        sender: userId,
+        receiver: post.author,
+        type: "comment",
+        referenceId: post._id,
+        message: `${user.name} commented on your post`,
+      });
+    }
 
     res.status(201).json({
       message: "Comment created",
@@ -85,4 +97,4 @@ const deleteComment = async (req, res) => {
   }
 };
 
-module.exports = {getComment, deleteComment, createComment};
+module.exports = { getComment, deleteComment, createComment };

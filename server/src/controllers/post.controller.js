@@ -1,4 +1,5 @@
 const Post = require("../models/post.model");
+const { createNotification } = require("../services/notification.services");
 
 const createPost = async (req, res) => {
   try {
@@ -85,7 +86,6 @@ const updatePost = async (req, res) => {
   }
 };
 
-
 const toggleLike = async (req, res) => {
   try {
     const { postId } = req.params;
@@ -99,9 +99,7 @@ const toggleLike = async (req, res) => {
       });
     }
 
-    const isLiked = post.likes.some(
-      (id) => id.toString() === userId
-    );
+    const isLiked = post.likes.some((id) => id.toString() === userId);
 
     if (isLiked) {
       post.likes.pull(userId);
@@ -111,19 +109,28 @@ const toggleLike = async (req, res) => {
 
     await post.save();
 
+    if (!isLiked && post.author.toString() !== userId) {
+      const user = await User.findById(userId);
+
+      await createNotification({
+        sender: userId,
+        receiver: post.author,
+        type: "like",
+        referenceId: post._id,
+        message: `${user.name} liked your post`,
+      });
+    }
     return res.status(200).json({
       Message: isLiked ? "unliked" : "liked",
       liked: !isLiked,
       likesCount: post.likes.length,
     });
-
   } catch (error) {
     return res.status(500).json({
       error: error.message,
     });
   }
 };
-
 
 module.exports = {
   createPost,

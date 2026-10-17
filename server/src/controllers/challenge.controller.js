@@ -1,6 +1,8 @@
 const { Challenge, UserChallenge } = require("../models/challenge.modol");
 const User = require("../models/user.model");
 
+const { createNotification } = require("../services/notification.services");
+
 const getChallengeById = async (req, res) => {
   try {
     const challengeId = req.params.challengeId;
@@ -59,6 +61,15 @@ const joinChallenge = async (req, res) => {
     });
 
     await userChallenge.save();
+    if (challenge.author.toString() !== userId) {
+      await createNotification({
+        sender: userId,
+        receiver: challenge.author,
+        type: "challenge",
+        referenceId: challenge._id,
+        message: `${user.name} joined your challenge`,
+      });
+    }
 
     res.status(201).json({
       message: "joined successfully",
@@ -211,8 +222,10 @@ const deleteChallenge = async (req, res) => {
 
 const getAllChallenges = async (req, res) => {
   try {
-    const challenges = await Challenge.find()
-      .populate("author", "name username");
+    const challenges = await Challenge.find().populate(
+      "author",
+      "name username",
+    );
 
     res.status(200).json(challenges);
   } catch (error) {
@@ -228,5 +241,5 @@ module.exports = {
   getChallengeById,
   createChallenge,
   joinChallenge,
-  getAllChallenges
+  getAllChallenges,
 };

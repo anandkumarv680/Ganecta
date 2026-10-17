@@ -1,5 +1,6 @@
 const Post = require("../models/post.model");
 const User = require("../models/user.model");
+const { createNotification } = require("../services/notification.services");
 
 const getUserById = async (req, res) => {
   try {
@@ -116,6 +117,14 @@ const followUser = async (req, res) => {
     await user.save();
     await targetUser.save();
 
+    await createNotification({
+      sender: user._id,
+      receiver: targetUser._id,
+      type: "follow",
+      referenceId: null,
+      message: `${user.name} started following you`,
+    });
+
     return res.status(200).json({
       message: "Followed successfully",
     });
@@ -195,5 +204,5 @@ module.exports = {
   followUser,
   getFollowers,
   getFollowing,
-  searchUser
+  searchUser,
 };
