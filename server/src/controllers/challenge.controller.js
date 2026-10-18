@@ -235,6 +235,131 @@ const getAllChallenges = async (req, res) => {
   }
 };
 
+const updateDailyProgress = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const challengeId = req.params.challengeId;
+
+    const challenge = await Challenge.findById(challengeId);
+
+    if (!challenge) {
+      return res.status(404).json({
+        error: "challenge not found",
+      });
+    }
+
+    const userChallenge = await UserChallenge.findOne({
+      user: userId,
+      challenge: challengeId,
+    });
+
+    if (!userChallenge) {
+      return res.status(404).json({
+        error: "You have not joined this challenge",
+      });
+    }
+
+    if (userChallenge.isCompleted) {
+      return res.status(400).json({
+        error: "Challenge already completed",
+      });
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const todayProgress = userChallenge.dailyProgress.find(
+      (progress) => progress.date.toDateString() === today.toDateString(),
+    );
+
+    if (todayProgress?.completed) {
+      return res.status(400).json({
+        error: "Today's progress is already completed",
+      });
+    }
+
+    if (todayProgress) {
+      todayProgress.completed = true;
+    } else {
+      userChallenge.dailyProgress.push({
+        date: today,
+        completed: true,
+      });
+    }
+
+    const completedDays = userChallenge.dailyProgress.filter(
+      (progress) => progress.completed,
+    ).length;
+
+    if (completedDays >= challenge.duration) {
+      userChallenge.isCompleted = true;
+      userChallenge.completedAt = new Date();
+
+      const pointsMap = {
+        Easy: 10,
+        Medium: 20,
+        Hard: 30,
+      };
+
+      userChallenge.points = pointsMap[challenge.difficulty];
+    }
+
+    await userChallenge.save();
+
+    res.status(200).json({
+      message: userChallenge.isCompleted
+        ? "Challenge completed successfully"
+        : "Daily progress completed successfully",
+      completedDays,
+      requiredDays: challenge.duration,
+      isCompleted: userChallenge.isCompleted,
+      userChallenge,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
+const getChallengeLeaderboard = async (req, res) => {
+  try {
+    const challengeId = req.params.challengeId;
+
+    const challenge = await Challenge.findById(challengeId);
+
+    if (!challenge) {
+      return res.status(404).json({
+        error: "challenge not found",
+      });
+    }
+
+    const leaderboard = await UserChallenge.find({
+      challenge: challengeId,
+    })
+      .sort({ points: -1, joinedAt: 1 })
+      .populate("user", "name username profilePicture")
+      .select("user points isCompleted completedAt");
+
+    const rankedLeaderboard = leaderboard.map((entry, index) => ({
+      rank: index + 1,
+      user: entry.user,
+      points: entry.points,
+      isCompleted: entry.isCompleted,
+      completedAt: entry.completedAt,
+    }));
+
+    res.status(200).json({
+      challenge: challenge.title,
+      leaderboard: rankedLeaderboard,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   deleteChallenge,
   updateChallenge,
@@ -242,4 +367,6 @@ module.exports = {
   createChallenge,
   joinChallenge,
   getAllChallenges,
+  updateDailyProgress,
+  getChallengeLeaderboard,
 };

@@ -23,10 +23,10 @@ const challengeSchema = new mongoose.Schema({
     required: true,
   },
 
-  author :{
-    type : mongoose.Schema.Types.ObjectId,
-    ref : "User",
-    required : true,
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
 
   createdAt: {
@@ -66,6 +66,16 @@ const userChallengeSchema = new mongoose.Schema({
       },
     },
   ],
+
+  isCompleted: {
+    type: Boolean,
+    default: false,
+  },
+
+  completedAt: {
+    type: Date,
+    default: null,
+  },
 
   points: {
     type: Number,
