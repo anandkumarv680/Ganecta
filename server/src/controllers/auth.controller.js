@@ -1,6 +1,17 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const rateLimit = require("express-rate-limit");
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  message: {
+    error: "Too many login attempts. Try again later.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 const createUser = async (req, res) => {
   try {
@@ -100,4 +111,5 @@ const loginUser = async (req, res) => {
 module.exports = {
   createUser,
   loginUser,
+  loginLimiter,
 };

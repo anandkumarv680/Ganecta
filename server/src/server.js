@@ -17,7 +17,7 @@ const mongoose = require("mongoose");
 
 const io = new Server(httpServer, {
   cors: {
-    origin: "*",
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
   },
 });
 
@@ -30,6 +30,14 @@ io.use((socket, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (
+      !decoded.id ||
+      typeof decoded.id !== "string" ||
+      !mongoose.Types.ObjectId.isValid(decoded.id)
+    ) {
+      return next(new Error("Invalid token payload"));
+    }
 
     socket.userId = decoded.id;
     next();
@@ -44,8 +52,25 @@ io.on("connection", (socket) => {
 
   socket.on("send-message", async (data, callback) => {
     try {
-      const { receiverId, content } =
-        typeof data === "string" ? JSON.parse(data) : data;
+      if (typeof data === "string") {
+        try {
+          data = JSON.parse(data);
+        } catch {
+          return callback?.({
+            success: false,
+            error: "Invalid message data",
+          });
+        }
+      }
+
+      if (!data || typeof data !== "object" || Array.isArray(data)) {
+        return callback?.({
+          success: false,
+          error: "Invalid message data",
+        });
+      }
+
+      const { receiverId, content } = data;
 
       if (
         !receiverId ||
