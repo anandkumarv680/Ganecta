@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
-const rateLimit = require("express-rate-limit");
 const app = express();
 const loginRoutes = require("./routes/login.route");
 const postRoutes = require("./routes/post.route");
