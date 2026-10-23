@@ -28,6 +28,9 @@ export type {
 } from './notification';
 export type {
   Message,
+  MessageUser,
+  Conversation,
+  ChatHistoryResponse,
   SendMessagePayload,
   SendMessageAck,
 } from './message';

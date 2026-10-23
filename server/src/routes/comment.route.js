@@ -12,7 +12,7 @@ const authMiddleware = require("../middleware/auth.middleware");
 
 router.post("/:postId", authMiddleware, createComment);
 
-router.get("/:postId", getComment);
+router.get("/:postId", authMiddleware, getComment);
 
 router.delete("/:commentId", authMiddleware, deleteComment);
 

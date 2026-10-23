@@ -1,5 +1,6 @@
 const Post = require("../models/post.model");
 const Comment = require("../models/comment.model");
+const User = require("../models/user.model");
 const { createNotification } = require("../services/notification.services");
 
 const createComment = async (req, res) => {
@@ -46,24 +47,25 @@ const createComment = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 const getComment = async (req, res) => {
   try {
     const postId = req.params.postId;
 
     const comments = await Comment.find({
       post: postId,
-    }).populate("user", "name username");
+    })
+      .populate("user", "name username")
+      .sort({ createdAt: 1 });
 
-    if (comments.length === 0) {
-      return res.status(404).json({ error: "No comments yet" });
-    }
-
-    res.status(200).json({
+    return res.status(200).json({
       message: "Comments fetched successfully",
       comments,
     });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    return res.status(500).json({
+      error: error.message,
+    });
   }
 };
 

@@ -13,18 +13,18 @@ const {
 
 const authMiddleware = require("../middleware/auth.middleware");
 
-router.get("/search", searchUser);
+router.get("/search", authMiddleware, searchUser);
 
 router.put("/profile", authMiddleware, updateUserProfile);
 
-router.get("/:userId", getUserById);
-
-router.get("/:userId/posts", getUserPost);
-
 router.put("/follow/:followId", authMiddleware, followUser);
 
-router.get("/:userId/followers", getFollowers);
+router.get("/:userId", authMiddleware, getUserById);
 
-router.get("/:userId/following", getFollowing);
+router.get("/:userId/posts", authMiddleware, getUserPost);
+
+router.get("/:userId/followers", authMiddleware, getFollowers);
+
+router.get("/:userId/following", authMiddleware, getFollowing);
 
 module.exports = router;

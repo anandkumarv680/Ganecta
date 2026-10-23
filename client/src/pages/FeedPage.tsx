@@ -89,6 +89,10 @@ export default function FeedPage() {
     setToast(message);
   };
 
+  const handleCommentError = (message: string) => {
+    setToast(message);
+  };
+
   return (
     <div className="max-w-2xl mx-auto">
       <div className="flex items-center justify-between mb-6">
@@ -180,6 +184,7 @@ export default function FeedPage() {
               onPostDeleted={handlePostDeleted}
               onPostUpdated={handlePostUpdated}
               onLikeError={handleLikeError}
+              onCommentError={handleCommentError}
               linkToDetail
             />
           ))}

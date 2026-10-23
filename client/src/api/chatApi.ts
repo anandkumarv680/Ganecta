@@ -1,6 +1,13 @@
 import { io, type Socket } from 'socket.io-client';
 import { getToken } from '@/utils/token';
-import type { SendMessagePayload, SendMessageAck, Message } from '@/types';
+import api from './axios';
+import type {
+  SendMessagePayload,
+  SendMessageAck,
+  Message,
+  Conversation,
+  ChatHistoryResponse,
+} from '@/types';
 
 const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -50,4 +57,18 @@ export function onNewMessage(callback: (message: Message) => void): () => void {
   return () => {
     socket?.off('new-message', callback);
   };
+}
+
+export async function getConversations(): Promise<Conversation[]> {
+  const { data } = await api.get<Conversation[]>('/api/messages/conversations');
+  return data;
+}
+
+export async function getChatHistory(
+  userId: string,
+): Promise<ChatHistoryResponse> {
+  const { data } = await api.get<ChatHistoryResponse>(
+    `/api/messages/${userId}`,
+  );
+  return data;
 }

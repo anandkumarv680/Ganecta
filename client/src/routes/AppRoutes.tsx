@@ -38,46 +38,23 @@ export default function AppRoutes() {
         }
       />
 
-      <Route element={<AppLayout />}>
+      <Route
+        element={
+          <ProtectedRoute>
+            <AppLayout />
+          </ProtectedRoute>
+        }
+      >
         <Route path="/" element={<FeedPage />} />
         <Route path="/challenges" element={<ChallengesPage />} />
         <Route path="/challenges/:challengeId" element={<ChallengeDetailPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/profile/:userId" element={<ProfilePage />} />
         <Route path="/posts/:postId" element={<PostDetailPage />} />
-
-        <Route
-          path="/profile/edit"
-          element={
-            <ProtectedRoute>
-              <EditProfilePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/chat"
-          element={
-            <ProtectedRoute>
-              <ChatPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/chat/:userId"
-          element={
-            <ProtectedRoute>
-              <ChatPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/notifications"
-          element={
-            <ProtectedRoute>
-              <NotificationsPage />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/profile/edit" element={<EditProfilePage />} />
+        <Route path="/chat" element={<ChatPage />} />
+        <Route path="/chat/:userId" element={<ChatPage />} />
+        <Route path="/notifications" element={<NotificationsPage />} />
       </Route>
 
       <Route path="*" element={<NotFoundPage />} />

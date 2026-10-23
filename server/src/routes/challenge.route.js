@@ -10,19 +10,23 @@ const {
   joinChallenge,
   getAllChallenges,
   updateDailyProgress,
-  getChallengeLeaderboard
+  getChallengeLeaderboard,
 } = require("../controllers/challenge.controller");
 
-router.get("/", getAllChallenges);
-router.get("/:challengeId", getChallengeById);
+router.get("/", authMiddleware, getAllChallenges);
+router.get("/:challengeId", authMiddleware, getChallengeById);
 
+router.post("/", authMiddleware, createChallenge);
 router.put("/:challengeId", authMiddleware, updateChallenge);
 router.delete("/:challengeId", authMiddleware, deleteChallenge);
 
-router.post("/", authMiddleware, createChallenge);
 router.post("/:challengeId/join", authMiddleware, joinChallenge);
-
 router.patch("/:challengeId/progress", authMiddleware, updateDailyProgress);
-router.get("/:challengeId/leaderboard", getChallengeLeaderboard);
+
+router.get(
+  "/:challengeId/leaderboard",
+  authMiddleware,
+  getChallengeLeaderboard,
+);
 
 module.exports = router;

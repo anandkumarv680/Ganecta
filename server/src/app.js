@@ -8,6 +8,7 @@ const userRoutes = require("./routes/user.route");
 const commentRoutes = require("./routes/comment.route");
 const challengeRoutes = require("./routes/challenge.route");
 const notificationRoutes = require("./routes/notification.route");
+const messageRoutes = require("./routes/message.route");
 
 app.use(express.json());
 app.use(helmet());
@@ -24,8 +25,9 @@ app.use("/api/posts", postRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/posts/comments", commentRoutes);
 app.use("/api/challenges", challengeRoutes);
+app.use("/api/messages", messageRoutes);
 
-// Global Error Handler
+
 app.use((err, req, res, next) => {
   console.error(err.message);
 
