@@ -1,15 +1,20 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { Bell, AlertCircle, RefreshCw, CheckCheck, BellOff } from 'lucide-react';
-import type { Notification } from '@/types';
-import { useAuth } from '@/context/AuthContext';
-import { Card, Button, EmptyState, Spinner } from '@/components/ui';
-import NotificationItem from '@/components/notifications/NotificationItem';
+import { useState, useEffect, useCallback, useRef } from "react";
+import {
+  AlertCircle,
+  RefreshCw,
+  CheckCheck,
+  BellOff,
+} from "lucide-react";
+import type { Notification } from "@/types";
+import { useAuth } from "@/context/AuthContext";
+import { Card, Button, EmptyState, Spinner } from "@/components/ui";
+import NotificationItem from "@/components/notifications/NotificationItem";
 import {
   getNotifications,
   markAsRead,
   deleteNotification,
-} from '@/api/notificationApi';
-import { extractErrorMessage } from '@/api/errors';
+} from "@/api/notificationApi";
+import { extractErrorMessage } from "@/api/errors";
 
 const POLL_INTERVAL = 30000;
 
@@ -19,7 +24,7 @@ export default function NotificationsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [actionId, setActionId] = useState<string | null>(null);
-  const [actionType, setActionType] = useState<'read' | 'delete' | null>(null);
+  const [actionType, setActionType] = useState<"read" | "delete" | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -66,7 +71,7 @@ export default function NotificationsPage() {
 
   const handleMarkRead = async (id: string) => {
     setActionId(id);
-    setActionType('read');
+    setActionType("read");
     try {
       await markAsRead(id);
       setNotifications((prev) =>
@@ -82,11 +87,11 @@ export default function NotificationsPage() {
 
   const handleDelete = async (id: string) => {
     setActionId(id);
-    setActionType('delete');
+    setActionType("delete");
     try {
       await deleteNotification(id);
       setNotifications((prev) => prev.filter((n) => n._id !== id));
-      showToast('Notification deleted');
+      showToast("Notification deleted");
     } catch (err) {
       showToast(extractErrorMessage(err));
     } finally {
@@ -107,13 +112,11 @@ export default function NotificationsPage() {
       }
     }
     if (failed) {
-      showToast('Some notifications could not be marked as read');
+      showToast("Some notifications could not be marked as read");
       fetchNotifications();
     } else {
-      setNotifications((prev) =>
-        prev.map((n) => ({ ...n, read: true })),
-      );
-      showToast('All notifications marked as read');
+      setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+      showToast("All notifications marked as read");
     }
   };
 
@@ -124,8 +127,8 @@ export default function NotificationsPage() {
           <h1 className="text-xl font-bold text-neutral-900">Notifications</h1>
           <p className="text-sm text-neutral-500 mt-0.5">
             {unreadCount > 0
-              ? `${unreadCount} unread notification${unreadCount > 1 ? 's' : ''}`
-              : 'You\'re all caught up'}
+              ? `${unreadCount} unread notification${unreadCount > 1 ? "s" : ""}`
+              : "You're all caught up"}
           </p>
         </div>
         <div className="flex gap-2">
@@ -141,7 +144,7 @@ export default function NotificationsPage() {
             onClick={fetchNotifications}
             disabled={loading}
           >
-            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
             Refresh
           </Button>
         </div>
@@ -176,7 +179,7 @@ export default function NotificationsPage() {
           <EmptyState
             icon={<BellOff className="h-7 w-7" />}
             title="No notifications"
-            description="You don't have any notifications yet. When someone follows you, likes your post, comments, or joins your challenge, you'll see it here."
+            description="You don't have any notifications yet."
           />
         </Card>
       )}
@@ -191,10 +194,10 @@ export default function NotificationsPage() {
                 onMarkRead={handleMarkRead}
                 onDelete={handleDelete}
                 markingRead={
-                  actionId === notification._id && actionType === 'read'
+                  actionId === notification._id && actionType === "read"
                 }
                 deleting={
-                  actionId === notification._id && actionType === 'delete'
+                  actionId === notification._id && actionType === "delete"
                 }
               />
             ))}

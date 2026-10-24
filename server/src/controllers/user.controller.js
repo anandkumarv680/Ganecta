@@ -33,7 +33,9 @@ const updateUserProfile = async (req, res) => {
     if (name !== undefined) user.name = name;
     if (bio !== undefined) user.bio = bio;
     if (skills !== undefined) user.skills = skills;
-    if (profileUrl !== undefined) user.profilePicture = profileUrl;
+    if (profileUrl !== undefined) {
+      user.profilePicture = profileUrl.trim();
+    }
 
     await user.save();
 

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 import {
   Network,
   Users,
@@ -7,9 +7,9 @@ import {
   Code2,
   ArrowRight,
   Sparkles,
-} from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
-import { Button } from '@/components/ui';
+} from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { Button } from "@/components/ui";
 
 export default function LandingPage() {
   const { token } = useAuth();
@@ -28,16 +28,20 @@ export default function LandingPage() {
             </span>
           </div>
           {token ? (
-            <Button size="sm" onClick={() => navigate('/')}>
+            <Button size="sm" onClick={() => navigate("/")}>
               Go to Feed
               <ArrowRight className="h-4 w-4" />
             </Button>
           ) : (
             <div className="flex items-center gap-3">
-              <Button variant="ghost" size="sm" onClick={() => navigate('/login')}>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate("/login")}
+              >
                 Sign In
               </Button>
-              <Button size="sm" onClick={() => navigate('/register')}>
+              <Button size="sm" onClick={() => navigate("/register")}>
                 Get Started
               </Button>
             </div>
@@ -54,25 +58,25 @@ export default function LandingPage() {
           </h1>
           <p className="text-lg text-neutral-600 leading-relaxed max-w-2xl mx-auto mb-8 animate-slide-up">
             A social platform where developers share ideas, join coding
-            challenges, and grow together. Find your community and level up
-            your skills.
+            challenges, and grow together. Find your community and level up your
+            skills.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 animate-slide-up">
             {token ? (
-              <Button size="lg" onClick={() => navigate('/')}>
+              <Button size="lg" onClick={() => navigate("/")}>
                 Enter Ganecta
                 <ArrowRight className="h-5 w-5" />
               </Button>
             ) : (
               <>
-                <Button size="lg" onClick={() => navigate('/register')}>
+                <Button size="lg" onClick={() => navigate("/register")}>
                   Create your account
                   <ArrowRight className="h-5 w-5" />
                 </Button>
                 <Button
                   variant="outline"
                   size="lg"
-                  onClick={() => navigate('/login')}
+                  onClick={() => navigate("/login")}
                 >
                   I already have one
                 </Button>
@@ -85,21 +89,21 @@ export default function LandingPage() {
           {[
             {
               icon: Users,
-              title: 'Connect with developers',
+              title: "Connect with developers",
               description:
-                'Follow other devs, share posts, and build your network in a space designed for technical conversations.',
+                "Follow other devs, share posts, and build your network in a space designed for technical conversations.",
             },
             {
               icon: Dumbbell,
-              title: 'Join coding challenges',
+              title: "Join coding challenges",
               description:
-                'Participate in daily challenges, track your progress, and compete on leaderboards to stay motivated.',
+                "Participate in daily challenges, track your progress, and compete on leaderboards to stay motivated.",
             },
             {
               icon: MessageSquare,
-              title: 'Real-time messaging',
+              title: "Real-time messaging",
               description:
-                'Chat with other developers in real time. Share ideas, get feedback, and collaborate instantly.',
+                "Chat with other developers in real time. Share ideas, get feedback, and collaborate instantly.",
             },
           ].map((feature, i) => {
             const Icon = feature.icon;

@@ -1,6 +1,6 @@
-import { type ReactNode } from 'react';
-import { Link } from 'react-router-dom';
-import { Network, Code2, Users, Dumbbell } from 'lucide-react';
+import { type ReactNode } from "react";
+import { Link } from "react-router-dom";
+import { Network, Code2, Users, Dumbbell } from "lucide-react";
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -24,11 +24,15 @@ export default function AuthLayout({
       <div className="hidden lg:flex lg:w-1/2 bg-neutral-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-900/30 via-neutral-900 to-secondary-900/20" />
         <div className="relative z-10 flex flex-col justify-between p-12 text-white w-full">
-          <Link to="/" className="flex items-center gap-2.5 w-fit">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-600">
-              <Network className="h-5 w-5" />
-            </div>
-            <span className="text-lg font-bold tracking-tight">Ganecta</span>
+          <Link to="/" className="flex items-end gap-0 w-fit mt-18">
+            <img
+              src="/ganecta-logo.png"
+              alt="Ganecta"
+              className="h-19 w-20 object-contain"
+            />
+            <span className="text-4xl font-bold tracking-tight text-white">
+              anecta
+            </span>
           </Link>
 
           <div className="max-w-md">
@@ -41,9 +45,18 @@ export default function AuthLayout({
             </p>
             <div className="space-y-4">
               {[
-                { icon: Code2, text: 'Share posts and get feedback from peers' },
-                { icon: Dumbbell, text: 'Join daily challenges and track progress' },
-                { icon: Users, text: 'Follow developers and build your network' },
+                {
+                  icon: Code2,
+                  text: "Share posts and get feedback from peers",
+                },
+                {
+                  icon: Dumbbell,
+                  text: "Solve challenges and track your progress.",
+                },
+                {
+                  icon: Users,
+                  text: "Follow developers and build your network",
+                },
               ].map((item) => {
                 const Icon = item.icon;
                 return (
@@ -51,7 +64,9 @@ export default function AuthLayout({
                     <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/10 shrink-0">
                       <Icon className="h-4.5 w-4.5 text-primary-300" />
                     </div>
-                    <span className="text-sm text-neutral-200">{item.text}</span>
+                    <span className="text-sm text-neutral-200">
+                      {item.text}
+                    </span>
                   </div>
                 );
               })}
@@ -70,6 +85,7 @@ export default function AuthLayout({
             <Link to="/" className="flex items-center gap-2.5 w-fit">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-600 text-white">
                 <Network className="h-5 w-5" />
+                
               </div>
               <span className="text-lg font-bold text-neutral-900 tracking-tight">
                 Ganecta
@@ -83,7 +99,7 @@ export default function AuthLayout({
           {children}
 
           <p className="mt-8 text-center text-sm text-neutral-500">
-            {altLinkText}{' '}
+            {altLinkText}{" "}
             <Link
               to={altLinkTo}
               className="font-medium text-primary-600 hover:text-primary-700 transition-colors"

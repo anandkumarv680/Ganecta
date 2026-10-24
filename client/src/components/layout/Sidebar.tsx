@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   Home,
   Users,
@@ -6,12 +6,11 @@ import {
   MessageSquare,
   Bell,
   User as UserIcon,
-  Network,
   LogOut,
-} from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
-import { Avatar } from '@/components/ui';
-import { disconnectSocket } from '@/api/chatApi';
+} from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { Avatar } from "@/components/ui";
+import { disconnectSocket } from "@/api/chatApi";
 
 interface NavItem {
   to: string;
@@ -20,11 +19,11 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { to: '/', label: 'Feed', icon: Home },
-  { to: '/challenges', label: 'Challenges', icon: Dumbbell },
-  { to: '/search', label: 'Discover', icon: Users },
-  { to: '/chat', label: 'Messages', icon: MessageSquare },
-  { to: '/notifications', label: 'Notifications', icon: Bell },
+  { to: "/", label: "Feed", icon: Home },
+  { to: "/challenges", label: "Challenges", icon: Dumbbell },
+  { to: "/search", label: "Discover", icon: Users },
+  { to: "/chat", label: "Messages", icon: MessageSquare },
+  { to: "/notifications", label: "Notifications", icon: Bell },
 ];
 
 export default function Sidebar() {
@@ -34,18 +33,27 @@ export default function Sidebar() {
   const handleLogout = () => {
     disconnectSocket();
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
     <aside className="hidden md:flex flex-col w-60 lg:w-64 h-screen sticky top-0 border-r border-neutral-200 bg-white">
       <div className="flex items-center gap-2.5 px-5 h-16 border-b border-neutral-200">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-600 text-white">
-          <Network className="h-5 w-5" />
+        <div className="flex items-center px-4 h-16 border-b border-neutral-200">
+          <div className="flex items-end ">
+            {/* <img
+              src="/ganecta-logo.png"
+              alt="Ganecta"
+              className="h-10 w-auto object-contain"
+            /> */}
+            <span className="text-4xl font-bold text-neutral-900 tracking-tight">
+              G
+            </span>
+            <span className="text-2xl font-bold text-neutral-900 tracking-tight">
+              anecta
+            </span>
+          </div>
         </div>
-        <span className="text-lg font-bold text-neutral-900 tracking-tight">
-          Ganecta
-        </span>
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-1">
@@ -55,12 +63,12 @@ export default function Sidebar() {
             <NavLink
               key={item.to}
               to={item.to}
-              end={item.to === '/'}
+              end={item.to === "/"}
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors duration-200 ${
                   isActive
-                    ? 'bg-primary-50 text-primary-700'
-                    : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900'
+                    ? "bg-primary-50 text-primary-700"
+                    : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
                 }`
               }
             >

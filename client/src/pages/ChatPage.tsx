@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Search,
   Send,
@@ -11,27 +11,27 @@ import {
   X,
   RefreshCw,
   Plus,
-} from 'lucide-react';
+} from "lucide-react";
 import type {
   Message,
   MessageUser,
   Conversation,
   SearchUserResult,
-} from '@/types';
-import { useAuth } from '@/context/AuthContext';
-import { Card, Avatar, Button, EmptyState, Spinner } from '@/components/ui';
+} from "@/types";
+import { useAuth } from "@/context/AuthContext";
+import { Card, Avatar, Button, EmptyState, Spinner } from "@/components/ui";
 import {
   connectSocket,
   sendMessage,
   onNewMessage,
   getConversations,
   getChatHistory,
-} from '@/api/chatApi';
-import { searchUsers, getUserById } from '@/api/userApi';
-import { extractErrorMessage } from '@/api/errors';
-import { formatDate } from '@/utils/date';
+} from "@/api/chatApi";
+import { searchUsers, getUserById } from "@/api/userApi";
+import { extractErrorMessage } from "@/api/errors";
+import { formatDate } from "@/utils/date";
 
-type ConnectionStatus = 'connecting' | 'connected' | 'disconnected';
+type ConnectionStatus = "connecting" | "connected" | "disconnected";
 
 interface ChatMessage {
   _id: string;
@@ -44,7 +44,7 @@ interface ChatMessage {
 }
 
 function getUserIdFromField(field: string | MessageUser): string {
-  return typeof field === 'string' ? field : field._id;
+  return typeof field === "string" ? field : field._id;
 }
 
 function normalizeMessage(msg: Message): ChatMessage {
@@ -62,9 +62,9 @@ export default function ChatPage() {
   const navigate = useNavigate();
   const { user, token } = useAuth();
 
-  const [status, setStatus] = useState<ConnectionStatus>('connecting');
+  const [status, setStatus] = useState<ConnectionStatus>("connecting");
   const [recipient, setRecipient] = useState<SearchUserResult | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<SearchUserResult[]>([]);
   const [searching, setSearching] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
@@ -79,7 +79,7 @@ export default function ChatPage() {
   const [messagesLoading, setMessagesLoading] = useState(false);
   const [messagesError, setMessagesError] = useState<string | null>(null);
 
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -131,30 +131,30 @@ export default function ChatPage() {
   // Connect socket on mount
   useEffect(() => {
     if (!token) return;
-    setStatus('connecting');
+    setStatus("connecting");
     const socket = connectSocket();
 
     if (!socket) {
-      setStatus('disconnected');
+      setStatus("disconnected");
       return;
     }
 
     if (socket.connected) {
-      setStatus('connected');
+      setStatus("connected");
     }
 
-    const onConnect = () => setStatus('connected');
-    const onDisconnect = () => setStatus('disconnected');
-    const onConnectError = () => setStatus('disconnected');
+    const onConnect = () => setStatus("connected");
+    const onDisconnect = () => setStatus("disconnected");
+    const onConnectError = () => setStatus("disconnected");
 
-    socket.on('connect', onConnect);
-    socket.on('disconnect', onDisconnect);
-    socket.on('connect_error', onConnectError);
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
+    socket.on("connect_error", onConnectError);
 
     return () => {
-      socket.off('connect', onConnect);
-      socket.off('disconnect', onDisconnect);
-      socket.off('connect_error', onConnectError);
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
+      socket.off("connect_error", onConnectError);
     };
   }, [token]);
 
@@ -252,7 +252,7 @@ export default function ChatPage() {
         });
       })
       .catch(() => {
-        setError('Could not load this user.');
+        setError("Could not load this user.");
       });
 
     fetchHistory(routeUserId);
@@ -260,7 +260,7 @@ export default function ChatPage() {
 
   // Auto-scroll to bottom
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const handleSearch = async (e: React.FormEvent) => {
@@ -284,7 +284,7 @@ export default function ChatPage() {
   const selectRecipient = (r: SearchUserResult) => {
     setRecipient(r);
     setMessages([]);
-    setSearchQuery('');
+    setSearchQuery("");
     setSearchResults([]);
     setShowSearch(false);
     loadedUserIdRef.current = r._id;
@@ -296,7 +296,7 @@ export default function ChatPage() {
     setRecipient(null);
     setMessages([]);
     loadedUserIdRef.current = null;
-    navigate('/chat', { replace: true });
+    navigate("/chat", { replace: true });
   };
 
   const handleSend = useCallback(
@@ -305,8 +305,8 @@ export default function ChatPage() {
       const content = input.trim();
       if (!content || !recipient || !user || sending) return;
 
-      if (status !== 'connected') {
-        setError('Not connected. Please wait for the connection to establish.');
+      if (status !== "connected") {
+        setError("Not connected. Please wait for the connection to establish.");
         return;
       }
 
@@ -324,7 +324,7 @@ export default function ChatPage() {
       };
 
       setMessages((prev) => [...prev, optimisticMsg]);
-      setInput('');
+      setInput("");
 
       // Update conversation preview optimistically, or add a new
       // conversation entry if this is the first message to this user.
@@ -356,32 +356,27 @@ export default function ChatPage() {
         return updated;
       });
 
-      sendMessage(
-        { receiverId: recipient._id, content },
-        (ack) => {
-          if (ack.success) {
-            const normalized = normalizeMessage(ack.message);
-            setMessages((prev) => {
-              // Replace the optimistic message, but also dedup in case
-              // the socket 'new-message' event already added it.
-              const filtered = prev.filter(
-                (m) => m._id !== tempId && m._id !== normalized._id,
-              );
-              return [...filtered, normalized];
-            });
-          } else {
-            setMessages((prev) =>
-              prev.map((m) =>
-                m._id === tempId
-                  ? { ...m, pending: false, failed: true }
-                  : m,
-              ),
+      sendMessage({ receiverId: recipient._id, content }, (ack) => {
+        if (ack.success) {
+          const normalized = normalizeMessage(ack.message);
+          setMessages((prev) => {
+            // Replace the optimistic message, but also dedup in case
+            // the socket 'new-message' event already added it.
+            const filtered = prev.filter(
+              (m) => m._id !== tempId && m._id !== normalized._id,
             );
-            setError(ack.error || 'Failed to send message');
-          }
-          setSending(false);
-        },
-      );
+            return [...filtered, normalized];
+          });
+        } else {
+          setMessages((prev) =>
+            prev.map((m) =>
+              m._id === tempId ? { ...m, pending: false, failed: true } : m,
+            ),
+          );
+          setError(ack.error || "Failed to send message");
+        }
+        setSending(false);
+      });
     },
     [input, recipient, user, sending, status],
   );
@@ -394,7 +389,7 @@ export default function ChatPage() {
             icon={<MessageSquare className="h-7 w-7" />}
             title="Sign in to chat"
             description="You need to be signed in to use real-time messaging."
-            action={<Button onClick={() => navigate('/login')}>Sign In</Button>}
+            action={<Button onClick={() => navigate("/login")}>Sign In</Button>}
           />
         </Card>
       </div>
@@ -406,32 +401,33 @@ export default function ChatPage() {
       <div className="mb-4">
         <h1 className="text-xl font-bold text-neutral-900">Messages</h1>
         <p className="text-sm text-neutral-500 mt-0.5">
-          Real-time one-to-one chat with other developers
+          Connect, collaborate, and share ideas with developers.
         </p>
+
       </div>
 
       {/* Connection status bar */}
       <div
         className={`flex items-center gap-2 px-4 py-2.5 rounded-xl mb-4 text-sm transition-colors ${
-          status === 'connected'
-            ? 'bg-success-50 text-success-700'
-            : status === 'connecting'
-              ? 'bg-warning-50 text-warning-700'
-              : 'bg-error-50 text-error-700'
+          status === "connected"
+            ? "bg-success-50 text-success-700"
+            : status === "connecting"
+              ? "bg-warning-50 text-warning-700"
+              : "bg-error-50 text-error-700"
         }`}
       >
-        {status === 'connected' ? (
+        {status === "connected" ? (
           <Wifi className="h-4 w-4" />
-        ) : status === 'connecting' ? (
+        ) : status === "connecting" ? (
           <Spinner className="!h-4 !w-4" />
         ) : (
           <WifiOff className="h-4 w-4" />
         )}
-        {status === 'connected'
-          ? 'Connected'
-          : status === 'connecting'
-            ? 'Connecting...'
-            : 'Disconnected — trying to reconnect'}
+        {status === "connected"
+          ? "Online"
+          : status === "connecting"
+            ? "Connecting..."
+            : "Disconnected — trying to reconnect"}
       </div>
 
       {/* Conversation list (shown when no recipient selected) */}
@@ -439,7 +435,7 @@ export default function ChatPage() {
         <Card className="p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-semibold text-neutral-700">
-              Conversations
+              Recent Chats
             </h2>
             <div className="flex items-center gap-2">
               <button
@@ -449,7 +445,7 @@ export default function ChatPage() {
                 aria-label="Refresh conversations"
               >
                 <RefreshCw
-                  className={`h-4 w-4 ${conversationsLoading ? 'animate-spin' : ''}`}
+                  className={`h-4 w-4 ${conversationsLoading ? "animate-spin" : ""}`}
                 />
               </button>
               <button
@@ -493,10 +489,7 @@ export default function ChatPage() {
                 <p className="text-sm text-neutral-500 mt-1 mb-4">
                   Search for a developer to start your first chat.
                 </p>
-                <Button
-                  onClick={() => setShowSearch(true)}
-                  size="sm"
-                >
+                <Button onClick={() => setShowSearch(true)} size="sm">
                   <Plus className="h-4 w-4" />
                   Start a conversation
                 </Button>
@@ -515,7 +508,7 @@ export default function ChatPage() {
                         _id: conv.user._id,
                         name: conv.user.name,
                         username: conv.user.username,
-                        profilePicture: conv.user.profilePicture || '',
+                        profilePicture: conv.user.profilePicture || "",
                       })
                     }
                     className="flex items-center gap-3 w-full p-3 rounded-xl hover:bg-neutral-50 transition-colors text-left"
@@ -556,7 +549,7 @@ export default function ChatPage() {
             <button
               onClick={() => {
                 setShowSearch(false);
-                setSearchQuery('');
+                setSearchQuery("");
                 setSearchResults([]);
               }}
               className="p-1.5 rounded-lg hover:bg-neutral-100 transition-colors shrink-0"
@@ -565,7 +558,7 @@ export default function ChatPage() {
               <ArrowLeft className="h-5 w-5 text-neutral-600" />
             </button>
             <h2 className="text-sm font-semibold text-neutral-700">
-              Start a conversation
+              Search by name or username
             </h2>
           </div>
           <form onSubmit={handleSearch} className="relative mb-4">
@@ -613,21 +606,17 @@ export default function ChatPage() {
             </div>
           )}
 
-          {!searching &&
-            searchResults.length === 0 &&
-            searchQuery.trim() && (
-              <p className="text-sm text-neutral-500 text-center py-6">
-                No developers found. Try a different search.
-              </p>
-            )}
+          {!searching && searchResults.length === 0 && searchQuery.trim() && (
+            <p className="text-sm text-neutral-500 text-center py-6">
+              No developers found. Try a different search.
+            </p>
+          )}
 
-          {!searching &&
-            searchResults.length === 0 &&
-            !searchQuery.trim() && (
-              <p className="text-sm text-neutral-400 text-center py-6">
-                Search for someone to start messaging.
-              </p>
-            )}
+          {!searching && searchResults.length === 0 && !searchQuery.trim() && (
+            <p className="text-sm text-neutral-400 text-center py-6">
+              Search for someone to start messaging.
+            </p>
+          )}
         </Card>
       )}
 
@@ -677,9 +666,7 @@ export default function ChatPage() {
             {!messagesLoading && messagesError && (
               <div className="flex flex-col items-center justify-center py-10 text-center">
                 <AlertCircle className="h-6 w-6 text-error-400 mb-2" />
-                <p className="text-sm text-neutral-600 mb-3">
-                  {messagesError}
-                </p>
+                <p className="text-sm text-neutral-600 mb-3">{messagesError}</p>
                 <Button
                   onClick={() => fetchHistory(recipient._id)}
                   variant="outline"
@@ -712,28 +699,26 @@ export default function ChatPage() {
                 return (
                   <div
                     key={msg._id}
-                    className={`flex ${isOwn ? 'justify-end' : 'justify-start'} mb-2`}
+                    className={`flex ${isOwn ? "justify-end" : "justify-start"} mb-2`}
                   >
                     <div
                       className={`max-w-[75%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed break-words ${
                         isOwn
-                          ? 'bg-primary-600 text-white rounded-br-md'
-                          : 'bg-white border border-neutral-200 text-neutral-700 rounded-bl-md'
-                      } ${msg.pending ? 'opacity-60' : ''} ${
-                        msg.failed
-                          ? 'bg-error-100 border-error-300'
-                          : ''
+                          ? "bg-primary-600 text-white rounded-br-md"
+                          : "bg-white border border-neutral-200 text-neutral-700 rounded-bl-md"
+                      } ${msg.pending ? "opacity-60" : ""} ${
+                        msg.failed ? "bg-error-100 border-error-300" : ""
                       }`}
                     >
                       <p>{msg.content}</p>
                       <p
                         className={`text-[10px] mt-1 ${
-                          isOwn ? 'text-primary-200' : 'text-neutral-400'
+                          isOwn ? "text-primary-200" : "text-neutral-400"
                         }`}
                       >
                         {formatDate(msg.createdAt)}
-                        {msg.pending && ' · Sending...'}
-                        {msg.failed && ' · Failed'}
+                        {msg.pending && " · Sending..."}
+                        {msg.failed && " · Failed"}
                       </p>
                     </div>
                   </div>
@@ -755,14 +740,14 @@ export default function ChatPage() {
                 if (error) setError(null);
               }}
               placeholder="Type a message..."
-              disabled={status !== 'connected'}
+              disabled={status !== "connected"}
               className="flex-1 h-10 px-4 rounded-xl bg-neutral-100 border border-transparent text-sm text-neutral-900 placeholder:text-neutral-400 focus:bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all disabled:opacity-50"
             />
             <Button
               type="submit"
               size="sm"
               loading={sending}
-              disabled={!input.trim() || status !== 'connected'}
+              disabled={!input.trim() || status !== "connected"}
               className="!px-3"
             >
               <Send className="h-4 w-4" />

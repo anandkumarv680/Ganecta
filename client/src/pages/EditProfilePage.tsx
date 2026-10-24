@@ -1,16 +1,10 @@
-import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {
-  ArrowLeft,
-  AlertCircle,
-  CheckCircle2,
-  X,
-  Plus,
-} from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
-import { Card, Input, Textarea, Button, Avatar } from '@/components/ui';
-import { updateProfile } from '@/api/userApi';
-import { extractErrorMessage } from '@/api/errors';
+import { useState, type FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft, AlertCircle, CheckCircle2, X, Plus } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { Card, Input, Textarea, Button, Avatar } from "@/components/ui";
+import { updateProfile } from "@/api/userApi";
+import { extractErrorMessage } from "@/api/errors";
 
 interface FormValues {
   name: string;
@@ -32,9 +26,9 @@ const MAX_SKILLS = 20;
 function validate(values: FormValues): FormErrors {
   const errors: FormErrors = {};
   if (!values.name.trim()) {
-    errors.name = 'Name is required';
+    errors.name = "Name is required";
   } else if (values.name.trim().length < 3) {
-    errors.name = 'Name must be at least 3 characters';
+    errors.name = "Name must be at least 3 characters";
   } else if (values.name.trim().length > MAX_NAME_LENGTH) {
     errors.name = `Name must be ${MAX_NAME_LENGTH} characters or fewer`;
   }
@@ -42,7 +36,8 @@ function validate(values: FormValues): FormErrors {
     errors.bio = `Bio must be ${MAX_BIO_LENGTH} characters or fewer`;
   }
   if (values.profileUrl && !/^https?:\/\/.+/.test(values.profileUrl)) {
-    errors.profileUrl = 'Please enter a valid URL starting with http:// or https://';
+    errors.profileUrl =
+      "Please enter a valid URL starting with http:// or https://";
   }
   return errors;
 }
@@ -52,13 +47,13 @@ export default function EditProfilePage() {
   const { user, refreshUser } = useAuth();
 
   const [values, setValues] = useState<FormValues>({
-    name: user?.name ?? '',
-    bio: user?.bio ?? '',
+    name: user?.name ?? "",
+    bio: user?.bio ?? "",
     skills: user?.skills ?? [],
-    profileUrl: user?.profilePicture ?? '',
+    profileUrl: user?.profilePicture ?? "",
   });
   const [errors, setErrors] = useState<FormErrors>({});
-  const [skillInput, setSkillInput] = useState('');
+  const [skillInput, setSkillInput] = useState("");
   const [apiError, setApiError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -66,7 +61,10 @@ export default function EditProfilePage() {
   const handleChange = (field: keyof FormValues, value: string) => {
     setValues((prev) => ({ ...prev, [field]: value }));
     if (errors[field as keyof FormErrors]) {
-      setErrors((prev) => ({ ...prev, [field as keyof FormErrors]: undefined }));
+      setErrors((prev) => ({
+        ...prev,
+        [field as keyof FormErrors]: undefined,
+      }));
     }
     if (apiError) setApiError(null);
   };
@@ -75,12 +73,12 @@ export default function EditProfilePage() {
     const trimmed = skillInput.trim();
     if (!trimmed) return;
     if (values.skills.includes(trimmed)) {
-      setSkillInput('');
+      setSkillInput("");
       return;
     }
     if (values.skills.length >= MAX_SKILLS) return;
     setValues((prev) => ({ ...prev, skills: [...prev.skills, trimmed] }));
-    setSkillInput('');
+    setSkillInput("");
   };
 
   const handleRemoveSkill = (skill: string) => {
@@ -91,7 +89,7 @@ export default function EditProfilePage() {
   };
 
   const handleSkillKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       handleAddSkill();
     }
@@ -113,7 +111,7 @@ export default function EditProfilePage() {
         name: values.name.trim(),
         bio: values.bio.trim() || undefined,
         skills: values.skills,
-        profileUrl: values.profileUrl.trim() || undefined,
+        profileUrl: values.profileUrl.trim(),
       });
       await refreshUser();
       setSaved(true);
@@ -137,10 +135,7 @@ export default function EditProfilePage() {
           <p className="text-sm text-neutral-500 mb-6">
             Your changes have been saved successfully.
           </p>
-          <Button
-            onClick={() => navigate(`/profile/${user?._id}`)}
-            fullWidth
-          >
+          <Button onClick={() => navigate(`/profile/${user?._id}`)} fullWidth>
             View Profile
           </Button>
         </Card>
@@ -167,11 +162,13 @@ export default function EditProfilePage() {
         <div className="flex items-center gap-4 mb-6">
           <Avatar
             src={values.profileUrl || undefined}
-            name={values.name || 'User'}
+            name={values.name || "User"}
             size="lg"
           />
           <div>
-            <p className="text-sm font-medium text-neutral-900">Profile Picture</p>
+            <p className="text-sm font-medium text-neutral-900">
+              Profile Picture
+            </p>
             <p className="text-xs text-neutral-500 mt-0.5">
               Paste an image URL below to update
             </p>
@@ -191,7 +188,7 @@ export default function EditProfilePage() {
             name="name"
             type="text"
             value={values.name}
-            onChange={(e) => handleChange('name', e.target.value)}
+            onChange={(e) => handleChange("name", e.target.value)}
             error={errors.name}
             maxLength={MAX_NAME_LENGTH}
             placeholder="Your name"
@@ -201,7 +198,7 @@ export default function EditProfilePage() {
             label="Bio"
             name="bio"
             value={values.bio}
-            onChange={(e) => handleChange('bio', e.target.value)}
+            onChange={(e) => handleChange("bio", e.target.value)}
             error={errors.bio}
             maxLength={MAX_BIO_LENGTH}
             placeholder="Tell others about yourself..."
@@ -267,7 +264,7 @@ export default function EditProfilePage() {
             name="profileUrl"
             type="url"
             value={values.profileUrl}
-            onChange={(e) => handleChange('profileUrl', e.target.value)}
+            onChange={(e) => handleChange("profileUrl", e.target.value)}
             error={errors.profileUrl}
             placeholder="https://example.com/avatar.jpg"
             hint="Paste a direct image URL"

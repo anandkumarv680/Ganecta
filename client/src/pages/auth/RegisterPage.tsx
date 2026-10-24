@@ -1,10 +1,10 @@
-import { useState, type FormEvent } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { CheckCircle2, AlertCircle } from 'lucide-react';
-import AuthLayout from '@/components/layout/AuthLayout';
-import { Button, Input } from '@/components/ui';
-import { register, type RegisterBody } from '@/api/authApi';
-import { extractErrorMessage } from '@/api/errors';
+import { useState, type FormEvent } from "react";
+import { useNavigate} from "react-router-dom";
+import { CheckCircle2, AlertCircle } from "lucide-react";
+import AuthLayout from "@/components/layout/AuthLayout";
+import { Button, Input } from "@/components/ui";
+import { register, type RegisterBody } from "@/api/authApi";
+import { extractErrorMessage } from "@/api/errors";
 
 interface FormErrors {
   name?: string;
@@ -22,29 +22,30 @@ function validate(values: {
   const errors: FormErrors = {};
 
   if (!values.name.trim()) {
-    errors.name = 'Name is required';
+    errors.name = "Name is required";
   } else if (values.name.trim().length < 3) {
-    errors.name = 'Name must be at least 3 characters';
+    errors.name = "Name must be at least 3 characters";
   } else if (values.name.trim().length > 30) {
-    errors.name = 'Name must be 30 characters or fewer';
+    errors.name = "Name must be 30 characters or fewer";
   }
 
   if (!values.username.trim()) {
-    errors.username = 'Username is required';
+    errors.username = "Username is required";
   } else if (!/^[a-zA-Z0-9_]+$/.test(values.username)) {
-    errors.username = 'Username can only contain letters, numbers, and underscores';
+    errors.username =
+      "Username can only contain letters, numbers, and underscores";
   }
 
   if (!values.email.trim()) {
-    errors.email = 'Email is required';
+    errors.email = "Email is required";
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
-    errors.email = 'Please enter a valid email address';
+    errors.email = "Please enter a valid email address";
   }
 
   if (!values.password) {
-    errors.password = 'Password is required';
+    errors.password = "Password is required";
   } else if (values.password.length < 8) {
-    errors.password = 'Password must be at least 8 characters';
+    errors.password = "Password must be at least 8 characters";
   }
 
   return errors;
@@ -53,10 +54,10 @@ function validate(values: {
 export default function RegisterPage() {
   const navigate = useNavigate();
   const [values, setValues] = useState({
-    name: '',
-    username: '',
-    email: '',
-    password: '',
+    name: "",
+    username: "",
+    email: "",
+    password: "",
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [apiError, setApiError] = useState<string | null>(null);
@@ -118,11 +119,7 @@ export default function RegisterPage() {
             Your account has been created successfully. Sign in to start
             connecting with other developers.
           </p>
-          <Button
-            fullWidth
-            size="lg"
-            onClick={() => navigate('/login')}
-          >
+          <Button fullWidth size="lg" onClick={() => navigate("/login")}>
             Continue to Sign In
           </Button>
         </div>
@@ -133,7 +130,7 @@ export default function RegisterPage() {
   return (
     <AuthLayout
       title="Create your account"
-      subtitle="Join the Ganecta developer community in less than a minute."
+      subtitle="Join the Ganecta developer community"
       altLinkText="Already have an account?"
       altLinkTo="/login"
       altLinkLabel="Sign in"
@@ -151,9 +148,9 @@ export default function RegisterPage() {
           name="name"
           type="text"
           autoComplete="name"
-          placeholder="Jane Developer"
+          placeholder="Anand Kumar"
           value={values.name}
-          onChange={(e) => handleChange('name', e.target.value)}
+          onChange={(e) => handleChange("name", e.target.value)}
           error={errors.name}
           maxLength={30}
         />
@@ -163,9 +160,9 @@ export default function RegisterPage() {
           name="username"
           type="text"
           autoComplete="username"
-          placeholder="janedev"
+          placeholder="anand@123"
           value={values.username}
-          onChange={(e) => handleChange('username', e.target.value)}
+          onChange={(e) => handleChange("username", e.target.value)}
           error={errors.username}
           hint="Letters, numbers, and underscores only"
         />
@@ -175,9 +172,9 @@ export default function RegisterPage() {
           name="email"
           type="email"
           autoComplete="email"
-          placeholder="jane@example.com"
+          placeholder="anand@example.com"
           value={values.email}
-          onChange={(e) => handleChange('email', e.target.value)}
+          onChange={(e) => handleChange("email", e.target.value)}
           error={errors.email}
         />
 
@@ -188,19 +185,14 @@ export default function RegisterPage() {
           autoComplete="new-password"
           placeholder="At least 8 characters"
           value={values.password}
-          onChange={(e) => handleChange('password', e.target.value)}
+          onChange={(e) => handleChange("password", e.target.value)}
           error={errors.password}
-          hint="Minimum 8 characters"
         />
 
         <Button type="submit" size="lg" fullWidth loading={loading}>
           Create account
         </Button>
       </form>
-
-      <p className="mt-6 text-xs text-neutral-400 text-center">
-        By creating an account, you agree to Ganecta's community guidelines.
-      </p>
     </AuthLayout>
   );
 }

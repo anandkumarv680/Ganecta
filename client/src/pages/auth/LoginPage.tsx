@@ -1,10 +1,10 @@
-import { useState, type FormEvent } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { AlertCircle } from 'lucide-react';
-import AuthLayout from '@/components/layout/AuthLayout';
-import { Button, Input } from '@/components/ui';
-import { useAuth } from '@/context/AuthContext';
-import { extractErrorMessage, isAuthError } from '@/api/errors';
+import { useState, type FormEvent } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { AlertCircle } from "lucide-react";
+import AuthLayout from "@/components/layout/AuthLayout";
+import { Button, Input } from "@/components/ui";
+import { useAuth } from "@/context/AuthContext";
+import { extractErrorMessage, isAuthError } from "@/api/errors";
 
 interface FormErrors {
   identifier?: string;
@@ -20,13 +20,13 @@ export default function LoginPage() {
   const location = useLocation();
   const { login } = useAuth();
 
-  const [identifier, setIdentifier] = useState('');
-  const [password, setPassword] = useState('');
+  const [identifier, setIdentifier] = useState("");
+  const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
   const [apiError, setApiError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const from = (location.state as LocationState)?.from?.pathname || '/';
+  const from = (location.state as LocationState)?.from?.pathname || "/";
 
   const handleIdentifierChange = (value: string) => {
     setIdentifier(value);
@@ -50,10 +50,10 @@ export default function LoginPage() {
 
     const validationErrors: FormErrors = {};
     if (!identifier.trim()) {
-      validationErrors.identifier = 'Email or username is required';
+      validationErrors.identifier = "Email or username is required";
     }
     if (!password) {
-      validationErrors.password = 'Password is required';
+      validationErrors.password = "Password is required";
     }
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -66,7 +66,7 @@ export default function LoginPage() {
       navigate(from, { replace: true });
     } catch (err) {
       if (isAuthError(err)) {
-        setApiError('Invalid email/username or password. Please try again.');
+        setApiError("Invalid email/username or password. Please try again.");
       } else {
         setApiError(extractErrorMessage(err));
       }
@@ -78,7 +78,7 @@ export default function LoginPage() {
   return (
     <AuthLayout
       title="Welcome back"
-      subtitle="Sign in to continue to your Ganecta account."
+      subtitle="Sign in to pick up where you left off."
       altLinkText="Don't have an account?"
       altLinkTo="/register"
       altLinkLabel="Create one"
@@ -96,7 +96,7 @@ export default function LoginPage() {
           name="identifier"
           type="text"
           autoComplete="username"
-          placeholder="jane@example.com or janedev"
+          placeholder="anand@123 or anand@example.com"
           value={identifier}
           onChange={(e) => handleIdentifierChange(e.target.value)}
           error={errors.identifier}

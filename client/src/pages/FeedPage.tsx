@@ -1,17 +1,18 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { MessageSquarePlus, RefreshCw, AlertCircle, FileText } from 'lucide-react';
-import type { Post } from '@/types';
-import { useAuth } from '@/context/AuthContext';
+import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import {
-  Card,
-  Button,
-  EmptyState,
-} from '@/components/ui';
-import PostCard from '@/components/posts/PostCard';
-import CreatePostForm from '@/components/posts/CreatePostForm';
-import { getAllPosts } from '@/api/postApi';
-import { extractErrorMessage } from '@/api/errors';
+  MessageSquarePlus,
+  RefreshCw,
+  AlertCircle,
+  FileText,
+} from "lucide-react";
+import type { Post } from "@/types";
+import { useAuth } from "@/context/AuthContext";
+import { Card, Button, EmptyState } from "@/components/ui";
+import PostCard from "@/components/posts/PostCard";
+import CreatePostForm from "@/components/posts/CreatePostForm";
+import { getAllPosts } from "@/api/postApi";
+import { extractErrorMessage } from "@/api/errors";
 
 function PostCardSkeleton() {
   return (
@@ -70,19 +71,17 @@ export default function FeedPage() {
 
   const handlePostCreated = (post: Post) => {
     setPosts((prev) => [post, ...prev]);
-    setToast('Post published successfully');
+    setToast("Post published successfully");
   };
 
   const handlePostUpdated = (updated: Post) => {
-    setPosts((prev) =>
-      prev.map((p) => (p._id === updated._id ? updated : p)),
-    );
-    setToast('Post updated');
+    setPosts((prev) => prev.map((p) => (p._id === updated._id ? updated : p)));
+    setToast("Post updated");
   };
 
   const handlePostDeleted = (postId: string) => {
     setPosts((prev) => prev.filter((p) => p._id !== postId));
-    setToast('Post deleted');
+    setToast("Post deleted");
   };
 
   const handleLikeError = (message: string) => {
@@ -97,7 +96,7 @@ export default function FeedPage() {
     <div className="max-w-2xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-bold text-neutral-900">Community Feed</h1>
+          <h1 className="text-xl font-bold text-neutral-900">Community</h1>
           <p className="text-sm text-neutral-500 mt-0.5">
             See what developers are sharing
           </p>
@@ -108,7 +107,7 @@ export default function FeedPage() {
           onClick={fetchPosts}
           disabled={loading}
         >
-          <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
           Refresh
         </Button>
       </div>
@@ -128,7 +127,7 @@ export default function FeedPage() {
               Sign in to create posts, like, and interact with the community.
             </p>
           </div>
-          <Button size="sm" onClick={() => navigate('/login')}>
+          <Button size="sm" onClick={() => navigate("/login")}>
             Sign In
           </Button>
         </Card>
@@ -166,7 +165,7 @@ export default function FeedPage() {
             description="Be the first to share something with the community. Posts from all developers will appear here."
             action={
               token ? undefined : (
-                <Button onClick={() => navigate('/register')}>
+                <Button onClick={() => navigate("/register")}>
                   Create an account
                 </Button>
               )

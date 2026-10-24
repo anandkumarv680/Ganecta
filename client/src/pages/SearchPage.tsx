@@ -1,15 +1,15 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Search, Users, AlertCircle, X } from 'lucide-react';
-import type { SearchUserResult } from '@/types';
-import { Card, EmptyState, Spinner } from '@/components/ui';
-import UserListItem from '@/components/users/UserListItem';
-import { searchUsers } from '@/api/userApi';
-import { extractErrorMessage } from '@/api/errors';
+import { useState, useEffect, useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
+import { Search, Users, AlertCircle, X } from "lucide-react";
+import type { SearchUserResult } from "@/types";
+import { Card, EmptyState, Spinner } from "@/components/ui";
+import UserListItem from "@/components/users/UserListItem";
+import { searchUsers } from "@/api/userApi";
+import { extractErrorMessage } from "@/api/errors";
 
 export default function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const queryFromUrl = searchParams.get('q') || '';
+  const queryFromUrl = searchParams.get("q") || "";
   const [inputValue, setInputValue] = useState(queryFromUrl);
   const [results, setResults] = useState<SearchUserResult[]>([]);
   const [loading, setLoading] = useState(false);
@@ -47,7 +47,7 @@ export default function SearchPage() {
   };
 
   const handleClear = () => {
-    setInputValue('');
+    setInputValue("");
     setResults([]);
     setError(null);
     setHasSearched(false);
@@ -57,9 +57,11 @@ export default function SearchPage() {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-xl font-bold text-neutral-900">Discover Developers</h1>
+        <h1 className="text-xl font-bold text-neutral-900">
+          Discover Developers
+        </h1>
         <p className="text-sm text-neutral-500 mt-0.5">
-          Search by name or username to find people to follow
+          Search by name or username
         </p>
       </div>
 
@@ -115,7 +117,7 @@ export default function SearchPage() {
           <EmptyState
             icon={<Search className="h-7 w-7" />}
             title="Start searching"
-            description="Type a name or username above to discover developers in the Ganecta community."
+            description="Search by name or username"
           />
         </Card>
       )}
@@ -123,7 +125,7 @@ export default function SearchPage() {
       {!loading && !error && results.length > 0 && (
         <div className="space-y-2">
           <p className="text-sm text-neutral-500 mb-3">
-            {results.length} {results.length === 1 ? 'result' : 'results'}
+            {results.length} {results.length === 1 ? "result" : "results"}
           </p>
           <Card className="overflow-hidden">
             <div className="p-2">

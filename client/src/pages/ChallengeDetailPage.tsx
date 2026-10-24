@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect, useCallback } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   AlertCircle,
@@ -11,14 +11,14 @@ import {
   UserPlus,
   CheckCircle2,
   X,
-} from 'lucide-react';
+} from "lucide-react";
 import type {
   Challenge,
   LeaderboardEntry,
   UserChallenge,
   Difficulty,
-} from '@/types';
-import { useAuth } from '@/context/AuthContext';
+} from "@/types";
+import { useAuth } from "@/context/AuthContext";
 import {
   Card,
   Badge,
@@ -26,23 +26,23 @@ import {
   Avatar,
   EmptyState,
   ConfirmDialog,
-} from '@/components/ui';
-import ChallengeForm from '@/components/challenges/ChallengeForm';
-import Leaderboard from '@/components/challenges/Leaderboard';
-import ProgressTracker from '@/components/challenges/ProgressTracker';
+} from "@/components/ui";
+import ChallengeForm from "@/components/challenges/ChallengeForm";
+import Leaderboard from "@/components/challenges/Leaderboard";
+import ProgressTracker from "@/components/challenges/ProgressTracker";
 import {
   getChallengeById,
   joinChallenge,
   deleteChallenge as deleteChallengeApi,
-} from '@/api/challengeApi';
-import { getLeaderboard } from '@/api/challengeApi';
-import { extractErrorMessage } from '@/api/errors';
-import { formatFullDate } from '@/utils/date';
+} from "@/api/challengeApi";
+import { getLeaderboard } from "@/api/challengeApi";
+import { extractErrorMessage } from "@/api/errors";
+import { formatFullDate } from "@/utils/date";
 
-const difficultyColor: Record<Difficulty, 'success' | 'warning' | 'error'> = {
-  Easy: 'success',
-  Medium: 'warning',
-  Hard: 'error',
+const difficultyColor: Record<Difficulty, "success" | "warning" | "error"> = {
+  Easy: "success",
+  Medium: "warning",
+  Hard: "error",
 };
 
 export default function ChallengeDetailPage() {
@@ -55,12 +55,14 @@ export default function ChallengeDetailPage() {
   const [error, setError] = useState<string | null>(null);
 
   const [joined, setJoined] = useState(false);
-  const [userChallenge, setUserChallenge] = useState<UserChallenge | null>(null);
+  const [userChallenge, setUserChallenge] = useState<UserChallenge | null>(
+    null,
+  );
   const [joinLoading, setJoinLoading] = useState(false);
 
-  const [leaderboardEntries, setLeaderboardEntries] = useState<LeaderboardEntry[]>(
-    [],
-  );
+  const [leaderboardEntries, setLeaderboardEntries] = useState<
+    LeaderboardEntry[]
+  >([]);
   const [leaderboardLoading, setLeaderboardLoading] = useState(true);
   const [leaderboardError, setLeaderboardError] = useState<string | null>(null);
 
@@ -110,22 +112,22 @@ export default function ChallengeDetailPage() {
   }, [toast]);
 
   const authorId =
-    typeof challenge?.author === 'string'
+    typeof challenge?.author === "string"
       ? challenge.author
-      : (challenge?.author as { _id?: string })?._id ?? '';
+      : ((challenge?.author as { _id?: string })?._id ?? "");
   const authorName =
-    typeof challenge?.author === 'string'
-      ? 'Unknown Developer'
-      : challenge?.author?.name ?? 'Unknown Developer';
+    typeof challenge?.author === "string"
+      ? "Unknown Developer"
+      : (challenge?.author?.name ?? "Unknown Developer");
   const authorUsername =
-    typeof challenge?.author === 'string'
-      ? 'unknown'
-      : challenge?.author?.username ?? 'unknown';
+    typeof challenge?.author === "string"
+      ? "unknown"
+      : (challenge?.author?.username ?? "unknown");
   const isOwner = !!user && !!authorId && user._id === authorId;
 
   const handleJoin = async () => {
     if (!token) {
-      navigate('/login');
+      navigate("/login");
       return;
     }
     if (!challengeId) return;
@@ -134,7 +136,7 @@ export default function ChallengeDetailPage() {
       const result = await joinChallenge(challengeId);
       setJoined(true);
       setUserChallenge(result.userChallenge);
-      setToast('Challenge joined! Start tracking your daily progress.');
+      setToast("Challenge joined! Start tracking your daily progress.");
       fetchLeaderboard();
     } catch (err) {
       setToast(extractErrorMessage(err));
@@ -146,7 +148,7 @@ export default function ChallengeDetailPage() {
   const handleEditSuccess = (updated: Challenge) => {
     setChallenge(updated);
     setShowEditForm(false);
-    setToast('Challenge updated');
+    setToast("Challenge updated");
   };
 
   const handleDelete = async () => {
@@ -154,7 +156,7 @@ export default function ChallengeDetailPage() {
     setDeleting(true);
     try {
       await deleteChallengeApi(challengeId);
-      navigate('/challenges');
+      navigate("/challenges");
     } catch (err) {
       setToast(extractErrorMessage(err));
     } finally {
@@ -173,7 +175,7 @@ export default function ChallengeDetailPage() {
     setUserChallenge(data.userChallenge);
     setToast(
       data.isCompleted
-        ? 'Challenge completed! Congratulations!'
+        ? "Challenge completed! Congratulations!"
         : `Day ${data.completedDays} of ${data.requiredDays} marked complete`,
     );
     fetchLeaderboard();
@@ -311,7 +313,11 @@ export default function ChallengeDetailPage() {
               {challenge.duration} days
             </span>
             <span className="flex items-center gap-1.5">
-              <Avatar name={authorName} size="xs" className="!h-5 !w-5 !text-[10px]" />
+              <Avatar
+                name={authorName}
+                size="xs"
+                className="!h-5 !w-5 !text-[10px]"
+              />
               @{authorUsername}
             </span>
             <span>{formatFullDate(challenge.createdAt)}</span>
@@ -333,7 +339,7 @@ export default function ChallengeDetailPage() {
                 Join Challenge
               </Button>
             ) : (
-              <Button onClick={() => navigate('/login')}>
+              <Button onClick={() => navigate("/login")}>
                 Sign in to Join
               </Button>
             )}

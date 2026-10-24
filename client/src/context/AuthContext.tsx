@@ -5,11 +5,11 @@ import {
   useCallback,
   useEffect,
   type ReactNode,
-} from 'react';
-import type { User } from '@/types';
-import { getToken, setToken, removeToken } from '@/utils/token';
-import { login as loginApi, type LoginBody } from '@/api/authApi';
-import { getUserById } from '@/api/userApi';
+} from "react";
+import type { User } from "@/types";
+import { getToken, setToken, removeToken } from "@/utils/token";
+import { login as loginApi, type LoginBody } from "@/api/authApi";
+import { getUserById } from "@/api/userApi";
 
 interface AuthContextValue {
   user: User | null;
@@ -24,7 +24,7 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 function decodeTokenId(token: string): string | null {
   try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
+    const payload = JSON.parse(atob(token.split(".")[1]));
     return payload?.id ?? null;
   } catch {
     return null;
@@ -97,7 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth(): AuthContextValue {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
+    throw new Error("useAuth must be used within AuthProvider");
   }
   return context;
 }

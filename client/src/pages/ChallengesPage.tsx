@@ -1,13 +1,13 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Plus, Dumbbell, AlertCircle, RefreshCw, X } from 'lucide-react';
-import type { Challenge } from '@/types';
-import { useAuth } from '@/context/AuthContext';
-import { Card, Button, EmptyState } from '@/components/ui';
-import ChallengeCard from '@/components/challenges/ChallengeCard';
-import ChallengeForm from '@/components/challenges/ChallengeForm';
-import { getAllChallenges } from '@/api/challengeApi';
-import { extractErrorMessage } from '@/api/errors';
+import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { Plus, Dumbbell, AlertCircle, RefreshCw, X } from "lucide-react";
+import type { Challenge } from "@/types";
+import { useAuth } from "@/context/AuthContext";
+import { Card, Button, EmptyState } from "@/components/ui";
+import ChallengeCard from "@/components/challenges/ChallengeCard";
+import ChallengeForm from "@/components/challenges/ChallengeForm";
+import { getAllChallenges } from "@/api/challengeApi";
+import { extractErrorMessage } from "@/api/errors";
 
 function ChallengeCardSkeleton() {
   return (
@@ -62,9 +62,11 @@ export default function ChallengesPage() {
     <div className="max-w-2xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-bold text-neutral-900">Coding Challenges</h1>
+          <h1 className="text-xl font-bold text-neutral-900">
+            Challenges
+          </h1>
           <p className="text-sm text-neutral-500 mt-0.5">
-            Join challenges, track daily progress, and compete on leaderboards
+            Join challenges and compete on leaderboards
           </p>
         </div>
         <div className="flex gap-2">
@@ -74,7 +76,7 @@ export default function ChallengesPage() {
             onClick={fetchChallenges}
             disabled={loading}
           >
-            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
             Refresh
           </Button>
           {token && (
@@ -137,8 +139,8 @@ export default function ChallengesPage() {
             title="No challenges yet"
             description={
               token
-                ? 'Create the first coding challenge for the community to join.'
-                : 'Sign in to create coding challenges for the community.'
+                ? "Create the first coding challenge for the community to join."
+                : "Sign in to create coding challenges for the community."
             }
             action={
               token ? (
@@ -147,7 +149,7 @@ export default function ChallengesPage() {
                   Create Challenge
                 </Button>
               ) : (
-                <Button onClick={() => navigate('/login')}>Sign In</Button>
+                <Button onClick={() => navigate("/login")}>Sign In</Button>
               )
             }
           />
