@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
 import {
-  Network,
   Users,
   Dumbbell,
   MessageSquare,
@@ -20,9 +19,6 @@ export default function LandingPage() {
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
         <header className="flex items-center justify-between h-20">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-600 text-white">
-              <Network className="h-5 w-5" />
-            </div>
             <span className="text-lg font-bold text-neutral-900 tracking-tight">
               Ganecta
             </span>

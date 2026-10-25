@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import type { Post, User } from '@/types';
 import { useAuth } from '@/context/AuthContext';
-import { Card, Avatar, Button, Badge, EmptyState, Spinner } from '@/components/ui';
+import { Card, Avatar, Button, Badge, EmptyState } from '@/components/ui';
 import PostCard from '@/components/posts/PostCard';
 import UserListModal from '@/components/users/UserListModal';
 import { getUserById, getUserPosts, followUser } from '@/api/userApi';
@@ -200,7 +200,7 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <Card className="p-6 animate-slide-up">
+      <Card className="p-5 sm:p-6 animate-slide-up">
         <div className="flex flex-col sm:flex-row items-start gap-5">
           <Avatar
             src={profile.profilePicture || undefined}
@@ -215,41 +215,45 @@ export default function ProfilePage() {
                 <h1 className="text-xl font-bold text-neutral-900 truncate">
                   {profile.name}
                 </h1>
-                <p className="text-sm text-neutral-500">@{profile.username}</p>
+                <p className="text-sm text-neutral-500 truncate">@{profile.username}</p>
               </div>
-              {isOwnProfile ? (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => navigate('/profile/edit')}
-                >
-                  <Settings className="h-4 w-4" />
-                  Edit Profile
-                </Button>
-              ) : (
-                <Button
-                  variant={isFollowing ? 'outline' : 'primary'}
-                  size="sm"
-                  onClick={handleFollowToggle}
-                  loading={followLoading}
-                >
-                  {isFollowing ? (
-                    <>
-                      <UserCheck className="h-4 w-4" />
-                      Following
-                    </>
-                  ) : (
-                    <>
-                      <UserPlus className="h-4 w-4" />
-                      Follow
-                    </>
-                  )}
-                </Button>
-              )}
+              <div className="shrink-0">
+                {isOwnProfile ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate('/profile/edit')}
+                  >
+                    <Settings className="h-4 w-4" />
+                    <span className="hidden sm:inline">Edit Profile</span>
+                    <span className="sm:hidden">Edit</span>
+                  </Button>
+                ) : (
+                  <Button
+                    variant={isFollowing ? 'outline' : 'primary'}
+                    size="sm"
+                    onClick={handleFollowToggle}
+                    loading={followLoading}
+                  >
+                    {isFollowing ? (
+                      <>
+                        <UserCheck className="h-4 w-4" />
+                        <span className="hidden sm:inline">Following</span>
+                        <span className="sm:hidden">Following</span>
+                      </>
+                    ) : (
+                      <>
+                        <UserPlus className="h-4 w-4" />
+                        Follow
+                      </>
+                    )}
+                  </Button>
+                )}
+              </div>
             </div>
 
             {profile.bio && (
-              <p className="mt-3 text-sm text-neutral-700 leading-relaxed">
+              <p className="mt-3 text-sm text-neutral-700 leading-relaxed break-words">
                 {profile.bio}
               </p>
             )}
@@ -265,7 +269,7 @@ export default function ProfilePage() {
               </div>
             )}
 
-            <div className="mt-4 flex items-center gap-5 text-sm">
+            <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
               <button
                 onClick={() => setShowFollowers(true)}
                 className="hover:underline"

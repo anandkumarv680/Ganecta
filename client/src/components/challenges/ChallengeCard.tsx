@@ -48,7 +48,7 @@ export default function ChallengeCard({ challenge }: ChallengeCardProps) {
           <p className="mt-1 text-sm text-neutral-500 line-clamp-2 leading-relaxed">
             {challenge.description}
           </p>
-          <div className="mt-3 flex items-center gap-3 text-xs text-neutral-400">
+          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-neutral-400">
             <span className="flex items-center gap-1">
               <Clock className="h-3.5 w-3.5" />
               {challenge.duration} days

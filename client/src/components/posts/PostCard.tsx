@@ -131,7 +131,7 @@ export default function PostCard({
 
   return (
     <>
-      <Card className="p-5 animate-slide-up">
+      <Card className="p-4 sm:p-5 animate-slide-up">
         <div className="flex items-start gap-3">
           <button
             onClick={handleAuthorClick}
@@ -146,19 +146,19 @@ export default function PostCard({
           </button>
 
           <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 min-w-0">
               <button
                 onClick={handleAuthorClick}
                 disabled={!author.id}
-                className="font-semibold text-sm text-neutral-900 hover:underline disabled:cursor-default disabled:no-underline"
+                className="font-semibold text-sm text-neutral-900 hover:underline disabled:cursor-default disabled:no-underline truncate"
               >
                 {author.name}
               </button>
-              <span className="text-sm text-neutral-400">
+              <span className="text-sm text-neutral-400 truncate shrink-0">
                 @{author.username}
               </span>
-              <span className="text-neutral-300">·</span>
-              <span className="text-sm text-neutral-400">
+              <span className="text-neutral-300 shrink-0">·</span>
+              <span className="text-sm text-neutral-400 shrink-0">
                 {formatDate(post.createdAt)}
               </span>
             </div>
@@ -248,7 +248,7 @@ export default function PostCard({
         )}
 
         {!isEditing && (
-          <div className="mt-4 flex items-center gap-1">
+          <div className="mt-4 flex items-center gap-1 flex-wrap">
             <button
               onClick={handleLike}
               disabled={likeLoading}

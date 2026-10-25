@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { Network, Code2, Users, Dumbbell } from "lucide-react";
+import { Code2, Users, Dumbbell } from "lucide-react";
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -83,10 +83,6 @@ export default function AuthLayout({
         <div className="w-full max-w-md">
           <div className="lg:hidden mb-8">
             <Link to="/" className="flex items-center gap-2.5 w-fit">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-600 text-white">
-                <Network className="h-5 w-5" />
-                
-              </div>
               <span className="text-lg font-bold text-neutral-900 tracking-tight">
                 Ganecta
               </span>
