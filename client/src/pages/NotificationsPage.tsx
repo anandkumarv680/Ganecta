@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Bell, AlertCircle, RefreshCw, CheckCheck, BellOff } from 'lucide-react';
+import { AlertCircle, RefreshCw, CheckCheck, BellOff } from 'lucide-react';
 import type { Notification } from '@/types';
 import { useAuth } from '@/context/AuthContext';
 import { Card, Button, EmptyState, Spinner } from '@/components/ui';
